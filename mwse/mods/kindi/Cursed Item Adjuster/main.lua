@@ -1,4 +1,4 @@
--- v1.2
+-- v1.2.1
 local config = require("kindi.Cursed Item Adjuster.config")
 local CELL = require("kindi.Cursed Item Adjuster.cells")
 local DAEDRA = require("kindi.Cursed Item Adjuster.daedras")
@@ -19,43 +19,25 @@ local function spawnDaedra(daedricPrince, objectValue)
 
     -- // matching summon
     if config.summonType == "Matching" then
-        if daedricPrince == "Sheogorath" then
-            daedra = daedSG[math.random(#daedSG)]
-        elseif daedricPrince == "Malacath" then
-            daedra = daedMC[math.random(#daedMC)]
-        elseif daedricPrince == "Mehrunes Dagon" then
-            daedra = daedMD[math.random(#daedMD)]
-        elseif daedricPrince == "Molag Bal" then
-            daedra = daedMB[math.random(#daedMB)]
-        elseif daedricPrince == "Azura" then
-            daedra = daedAZ[math.random(#daedAZ)]
-        elseif daedricPrince == "Boethiah" then
-            daedra = daedBT[math.random(#daedBT)]
-        else
-            -- //unknown daedric prince use the default
-            daedra = "dremora_lord"
-        end
-
+        daedra = table.choice(DAEDRA[daedricPrince] or {}) or "dremora_lord"-- //unknown daedric prince use the default
         -- //randomised summon
     elseif config.summonType == "Randomised" then
-        daedra = daedRandom[math.random(#daedRandom)]
-
+        daedra = table.choice(DAEDRA["Random"])
         -- //default vanilla summon
     elseif config.summonType == "Default" then
         daedra = "dremora_lord"
-
         -- //item value summon
     elseif config.summonType == "Item Value" then
         if objectValue < 100 then
-            daedra = daedGoldRank1[math.random(#daedGoldRank1)]
+            daedra = table.choice(DAEDRA["GR1"])
         elseif objectValue >= 100 and objectValue < 250 then
-            daedra = daedGoldRank2[math.random(#daedGoldRank2)]
+            daedra = table.choice(DAEDRA["GR2"])
         elseif objectValue >= 250 then
-            daedra = daedGoldRank3[math.random(#daedGoldRank3)]
+            daedra = table.choice(DAEDRA["GR3"])
         end
         -- // no summon
     elseif config.summonType == "Nothing" then
-        -- do nothing
+        return 1
     end
 
 
